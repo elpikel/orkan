@@ -1,4 +1,5 @@
 defmodule Orkan.Windguru.Client do
-  def get() do
-  end
+  """
+  Gets data from Windguru
+  """
 end
