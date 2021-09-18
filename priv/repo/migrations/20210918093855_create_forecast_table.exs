@@ -3,8 +3,6 @@ defmodule Orkan.Repo.Migrations.CreateForecastTable do
 
   def change do
     create table(:forecasts) do
-      add :longitude, :string
-      add :latitude, :string
       add :datetime, :utc_datetime
       add :wind_speed, :float
       add :wind_direction, :integer

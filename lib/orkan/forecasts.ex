@@ -22,12 +22,7 @@ defmodule Orkan.Forecasts do
       datetime = format(datetime)
 
       forecast =
-        Repo.one(
-          from f in Forecast,
-            where:
-              f.latitude == ^place.latitude and f.longitude == ^place.longitude and
-                f.datetime == ^datetime
-        )
+        Repo.one(from f in Forecast, where: f.place_id == ^place.id and f.datetime == ^datetime)
 
       wind_speed = to_float(Enum.at(forecasts["hourly"]["windspeed_10m"], index))
       wind_direction = Enum.at(forecasts["hourly"]["winddirection_10m"], index)

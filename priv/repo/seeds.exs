@@ -9,3 +9,8 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+#
+alias Orkan.Repo
+alias Orkan.Forecasts.Place
+
+Repo.insert(%Place{longitude: "54.7147", latitude: "18.5581", name: "Jastarnia"})

@@ -6,8 +6,6 @@ defmodule Orkan.Forecasts.Forecast do
   alias Orkan.Forecasts.Place
 
   schema "forecasts" do
-    field :longitude, :string
-    field :latitude, :string
     field :datetime, :utc_datetime
     field :wind_speed, :float
     field :wind_direction, :integer
