@@ -8,7 +8,7 @@ defmodule Orkan.Subscriptions.User do
   schema "users" do
     field :email, :string
 
-    has_many :subscription, Subscription
+    has_many :subscriptions, Subscription
   end
 
   def changeset(struct, params) do

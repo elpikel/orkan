@@ -47,7 +47,8 @@ defmodule Orkan.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:tesla, "~> 1.4.3"},
       {:hackney, "~> 1.17"},
-      {:quantum, "~> 3.0"}
+      {:quantum, "~> 3.0"},
+      {:tzdata, "~> 1.1"}
     ]
   end
 
