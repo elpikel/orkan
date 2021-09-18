@@ -1,4 +1,4 @@
-defmodule Orkan.Windguru.Worker do
+defmodule Orkan.OpenMeteo.Worker do
   """
   Run periodically 
   - Get data from windguru
