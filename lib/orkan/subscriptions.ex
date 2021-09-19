@@ -7,6 +7,40 @@ defmodule Orkan.Subscriptions do
 
   import Ecto.Query
 
+  def create(subscription_params) do
+    {:ok, user} = get_or_create_user(subscription_params["email"])
+
+    changeset =
+      Subscription.changeset(%Subscription{}, %{
+        place_id: subscription_params["place_id"],
+        user_id: user.id
+      })
+
+    case Repo.insert(changeset) do
+      {:ok, subscription} ->
+        {:ok, subscription}
+
+      {:error, _} ->
+        {:error, "Already subscribed."}
+    end
+  end
+
+  defp get_or_create_user(email) do
+    user = Repo.one(from u in User, where: u.email == ^email)
+
+    case user do
+      nil ->
+        Repo.insert(User.changeset(%User{}, %{email: email}))
+
+      _ ->
+        {:ok, user}
+    end
+  end
+
+  def get_places() do
+    Repo.all(from p in Place, select: %{id: p.id, name: p.name})
+  end
+
   def send() do
     User
     |> Repo.all()

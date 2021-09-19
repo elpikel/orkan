@@ -16,7 +16,8 @@ defmodule OrkanWeb.Router do
   scope "/", OrkanWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    get "/", SubscriptionsController, :index
+    post "/", SubscriptionsController, :create
   end
 
   # Other scopes may use custom stacks.

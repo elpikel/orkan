@@ -15,5 +15,6 @@ defmodule Orkan.Subscriptions.Subscription do
     struct
     |> cast(params, [:place_id, :user_id])
     |> validate_required([:place_id, :user_id])
+    |> unique_constraint([:place_id, :user_id])
   end
 end

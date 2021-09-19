@@ -1,0 +1,13 @@
+<h1>Orkan</h1>
+<%= form_for @changeset, Routes.subscriptions_path(@conn, :create), fn f -> %>
+  <label>
+    Email: <%= text_input f, :email%>
+  </label>
+  <%= error_tag f, :email %>
+
+  <label>
+    Place: <%= select f, :place_id, @places %>
+  </label>
+
+  <%= submit "Subscribe" %>
+<% end %>
