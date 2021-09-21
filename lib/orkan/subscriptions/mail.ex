@@ -1,5 +1,6 @@
 defmodule Orkan.Subscriptions.Mail do
-  """
-  Responsible for sending emails
-  """
+  def send(user, forecasts) do
+    IO.inspect(user)
+    IO.inspect(forecasts)
+  end
 end
