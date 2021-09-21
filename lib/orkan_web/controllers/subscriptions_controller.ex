@@ -9,11 +9,10 @@ defmodule OrkanWeb.SubscriptionsController do
   end
 
   def create(conn, %{"subscription" => subscription_params}) do
-    IO.inspect(subscription_params)
-    changeset = Subscription.changeset(%Subscription{}, subscription_params) |> IO.inspect()
+    changeset = Subscription.changeset(%Subscription{}, subscription_params)
 
     if changeset.valid? do
-      case Subscriptions.create(subscription_params) do
+      case Subscriptions.create(changeset.changes) do
         {:ok, _} ->
           conn
           |> put_flash(:info, "Succesfully subscribed.")

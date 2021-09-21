@@ -7,15 +7,9 @@ defmodule Orkan.Subscriptions do
 
   import Ecto.Query
 
-  def create(subscription_params) do
-    user = get_or_create_user(subscription_params["email"])
-
-    place =
-      get_or_create_place(
-        subscription_params["longitude"],
-        subscription_params["latitude"],
-        subscription_params["name"]
-      )
+  def create(%{email: email, longitude: longitude, latitude: latitude, name: name}) do
+    user = get_or_create_user(email)
+    place = get_or_create_place(longitude, latitude, name)
 
     case Repo.insert(
            Subscription.changeset(%Subscription{}, %{
@@ -26,8 +20,12 @@ defmodule Orkan.Subscriptions do
       {:ok, subscription} ->
         {:ok, subscription}
 
-      {:error, _} ->
-        {:error, "Already subscribed."}
+      {:error, changeset} ->
+        if Subscription.already_subscribed?(changeset) do
+          {:error, "Already subscribed."}
+        else
+          {:error, changeset}
+        end
     end
   end
 
@@ -36,7 +34,9 @@ defmodule Orkan.Subscriptions do
       nil ->
         {:ok, place} =
           Repo.insert(
-            Place.changeset(%Place{}, %{longitude: longitude, latitude: latitude, name: name})
+            Place.changeset(%Place{}, %{longitude: longitude, latitude: latitude, name: name}),
+            on_conflict: [set: [name: name]],
+            conflict_target: [:longitude, :latitude]
           )
 
         place
@@ -49,7 +49,7 @@ defmodule Orkan.Subscriptions do
   defp get_or_create_user(email) do
     case Repo.one(from u in User, where: u.email == ^email) do
       nil ->
-        {:ok, user} = Repo.insert(User.changeset(%User{}, %{email: email}))
+        {:ok, user} = Repo.insert(User.changeset(%User{}, %{email: email}), on_conflict: :nothing)
         user
 
       user ->
@@ -98,10 +98,9 @@ defmodule Orkan.Subscriptions do
           end)
       }
     end)
-    |> IO.inspect()
   end
 
   defp add_days(datetime, days) do
-    DateTime.add(datetime, days * 24 * 60 * 60, :seconds)
+    DateTime.add(datetime, days * 24 * 60 * 60, :second)
   end
 end

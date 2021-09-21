@@ -18,8 +18,8 @@ config :phoenix, :json_library, Jason
 
 config :orkan, Orkan.Scheduler,
   jobs: [
-    {"* * * * *", {Orkan.Forecasts, :update, []}},
-    {"* * * * *", {Orkan.Subscriptions, :send, []}}
+    {"1 * * * *", {Orkan.Forecasts, :update, []}},
+    {"1 * * * *", {Orkan.Subscriptions, :send, []}}
   ]
 
 import_config "#{Mix.env()}.exs"
