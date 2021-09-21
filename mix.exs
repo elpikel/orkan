@@ -35,20 +35,20 @@ defmodule Orkan.MixProject do
     [
       {:phoenix, "~> 1.5.12"},
       {:phoenix_ecto, "~> 4.4"},
-      {:ecto_sql, "~> 3.4"},
+      {:ecto_sql, "~> 3.7"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.4"},
-      {:telemetry_metrics, "~> 0.4"},
+      {:telemetry_metrics, "~> 0.6.1"},
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"},
+      {:plug_cowboy, "~> 2.5.2"},
       {:tesla, "~> 1.4.3"},
       {:hackney, "~> 1.17"},
       {:quantum, "~> 3.0"},
-      {:decimal, "~> 1.5"}
+      {:decimal, "~> 2.0"}
     ]
   end
 

@@ -39,8 +39,8 @@ defmodule OrkanWeb.Requests.Subscription do
       :error ->
         false
 
-      {:ok, coordinate} ->
-        if Decimal.cmp(coordinate, 0) == :lt do
+      {coordinate, _} ->
+        if Decimal.compare(coordinate, 0) == :lt do
           false
         else
           true
