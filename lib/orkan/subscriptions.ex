@@ -1,11 +1,15 @@
 defmodule Orkan.Subscriptions do
+  import Ecto.Query
+
   alias Orkan.Forecasts
   alias Orkan.Repo
   alias Orkan.Subscriptions.Mail
   alias Orkan.Subscriptions.Subscription
   alias Orkan.Subscriptions.User
 
-  import Ecto.Query
+  def get(user_id) do
+    Repo.all(from s in Subscription, where: s.user_id == ^user_id)
+  end
 
   def create(%{email: email, longitude: longitude, latitude: latitude, name: name}) do
     user = get_or_create_user(email)

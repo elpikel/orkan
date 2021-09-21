@@ -5,7 +5,7 @@ defmodule Orkan.Forecasts do
   alias Orkan.Forecasts.Place
   alias Orkan.OpenMeteo.Client
   alias Orkan.Repo
-  alias Orkan.Subscriptions.Subscription
+  alias Orkan.Subscriptions
 
   def get_or_create_place(longitude, latitude, name) do
     case Repo.one(from p in Place, where: p.longitude == ^longitude and p.latitude == ^latitude) do
@@ -29,14 +29,18 @@ defmodule Orkan.Forecasts do
     tomorrow = add_days(today, 1)
     in_two_days = add_days(tomorrow, 2)
 
+    places_id =
+      user.id
+      |> Subscriptions.get()
+      |> Enum.map(fn subscription -> subscription.place_id end)
+
     query =
-      from s in Subscription,
-        join: p in Place,
-        on: p.id == s.place_id,
+      from p in Place,
         join: f in Forecast,
         on: f.place_id == p.id,
         select: {p.name, f.datetime, f.wind_speed, f.wind_direction},
-        where: s.user_id == ^user.id and f.datetime >= ^tomorrow and f.datetime < ^in_two_days,
+        where: f.datetime >= ^tomorrow and f.datetime < ^in_two_days,
+        where: p.id in ^places_id,
         order_by: [p.name, f.datetime]
 
     Repo.all(query)
