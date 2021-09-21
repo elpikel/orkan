@@ -5,14 +5,12 @@ defmodule OrkanWeb.SubscriptionsController do
   alias OrkanWeb.Requests.Subscription
 
   def index(conn, _params) do
-    render(conn, "index.html",
-      places: map_places(Subscriptions.get_places()),
-      changeset: Subscription.changeset(%Subscription{}, %{})
-    )
+    render(conn, "index.html", changeset: Subscription.changeset(%Subscription{}, %{}))
   end
 
   def create(conn, %{"subscription" => subscription_params}) do
-    changeset = Subscription.changeset(%Subscription{}, subscription_params)
+    IO.inspect(subscription_params)
+    changeset = Subscription.changeset(%Subscription{}, subscription_params) |> IO.inspect()
 
     if changeset.valid? do
       case Subscriptions.create(subscription_params) do
@@ -24,20 +22,10 @@ defmodule OrkanWeb.SubscriptionsController do
         {:error, error} ->
           conn
           |> put_flash(:error, error)
-          |> render("index.html",
-            places: map_places(Subscriptions.get_places()),
-            changeset: changeset
-          )
+          |> render("index.html", changeset: changeset)
       end
     else
-      render(conn, "index.html",
-        places: map_places(Subscriptions.get_places()),
-        changeset: %{changeset | action: :insert}
-      )
+      render(conn, "index.html", changeset: %{changeset | action: :insert})
     end
-  end
-
-  defp map_places(places) do
-    Enum.map(places, fn place -> {place.name, place.id} end)
   end
 end

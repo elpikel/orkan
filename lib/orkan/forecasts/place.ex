@@ -17,5 +17,6 @@ defmodule Orkan.Forecasts.Place do
     struct
     |> cast(params, [:latitude, :longitude, :name])
     |> validate_required([:latitude, :longitude, :name])
+    |> unique_constraint([:latitude, :longitude])
   end
 end

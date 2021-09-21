@@ -8,12 +8,18 @@ defmodule Orkan.Subscriptions do
   import Ecto.Query
 
   def create(subscription_params) do
-    {:ok, user} =
-      Repo.insert_or_update(User.changeset(%User{}, %{email: subscription_params["email"]}))
+    user = get_or_create_user(subscription_params["email"])
+
+    place =
+      get_or_create_place(
+        subscription_params["longitude"],
+        subscription_params["latitude"],
+        subscription_params["name"]
+      )
 
     case Repo.insert(
            Subscription.changeset(%Subscription{}, %{
-             place_id: subscription_params["place_id"],
+             place_id: place.id,
              user_id: user.id
            })
          ) do
@@ -25,8 +31,30 @@ defmodule Orkan.Subscriptions do
     end
   end
 
-  def get_places() do
-    Repo.all(from p in Place, select: %{id: p.id, name: p.name})
+  defp get_or_create_place(longitude, latitude, name) do
+    case Repo.one(from p in Place, where: p.longitude == ^longitude and p.latitude == ^latitude) do
+      nil ->
+        {:ok, place} =
+          Repo.insert(
+            Place.changeset(%Place{}, %{longitude: longitude, latitude: latitude, name: name})
+          )
+
+        place
+
+      place ->
+        place
+    end
+  end
+
+  defp get_or_create_user(email) do
+    case Repo.one(from u in User, where: u.email == ^email) do
+      nil ->
+        {:ok, user} = Repo.insert(User.changeset(%User{}, %{email: email}))
+        user
+
+      user ->
+        user
+    end
   end
 
   def send() do

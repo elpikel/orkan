@@ -4,10 +4,18 @@
     Email: <%= text_input f, :email%>
   </label>
   <%= error_tag f, :email %>
-
   <label>
-    Place: <%= select f, :place_id, @places %>
+    Longitude: <%= text_input f, :longitude%>
   </label>
+  <%= error_tag f, :longitude%>
+  <label>
+    Latitude: <%= text_input f, :latitude%>
+  </label>
+  <%= error_tag f, :latitude%>
+  <label>
+    Name: <%= text_input f, :name%>
+  </label>
+  <%= error_tag f, :name%>
 
   <%= submit "Subscribe" %>
 <% end %>

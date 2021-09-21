@@ -15,5 +15,6 @@ defmodule Orkan.Subscriptions.User do
     struct
     |> cast(params, [:email])
     |> validate_required([:email])
+    |> unique_constraint([:email])
   end
 end
