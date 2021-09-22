@@ -3,9 +3,12 @@ defmodule Orkan.Subscriptions do
 
   alias Orkan.Forecasts
   alias Orkan.Repo
-  alias Orkan.Subscriptions.Mailer
   alias Orkan.Subscriptions.Subscription
   alias Orkan.Subscriptions.User
+
+  def users() do
+    Repo.all(User)
+  end
 
   def get(user_id) do
     Repo.all(from s in Subscription, where: s.user_id == ^user_id)
@@ -27,17 +30,6 @@ defmodule Orkan.Subscriptions do
       {:error, _changeset} ->
         {:error, "Already subscribed."}
     end
-  end
-
-  def send() do
-    User
-    |> Repo.all()
-    |> Enum.each(fn user -> send(user) end)
-  end
-
-  defp send(user) do
-    forecasts = Forecasts.get(user)
-    Mailer.send(user, forecasts)
   end
 
   defp get_or_create_user(email) do

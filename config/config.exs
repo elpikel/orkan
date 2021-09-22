@@ -22,7 +22,7 @@ config :orkan, Orkan.Scheduler,
     {"1 * * * *", {Orkan.Subscriptions, :send, []}}
   ]
 
-config :orkan, Orkan.Subscriptions.Mailer,
+config :orkan, Orkan.Notifications.Mailer,
   adapter: Bamboo.SendGridAdapter,
   api_key: System.get_env("SENDGRID_API_KEY")
 

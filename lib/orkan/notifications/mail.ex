@@ -1,13 +1,14 @@
-defmodule Orkan.Subscriptions.Mailer do
-  use Bamboo.Mailer, otp_app: :orkan
+defmodule Orkan.Notifications.Mail do
   use Bamboo.Phoenix, view: OrkanWeb.EmailView
 
   import Bamboo.Email
 
+  alias Orkan.Notifications.Mailer
+
   def send(user, forecasts) do
     user
     |> forecast_email(forecasts)
-    |> deliver_now!()
+    |> Mailer.deliver_now!()
   end
 
   def forecast_email(user, forecasts) do
