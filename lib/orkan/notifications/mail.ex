@@ -15,8 +15,8 @@ defmodule Orkan.Notifications.Mail do
     new_email()
     |> from("Orkan<info@orkan.com>")
     |> to(user.email)
-    |> subject("Orkan: wind alert")
+    |> subject("Orkan: forecast")
     |> assign(:forecasts, forecasts)
-    |> render("wind_alert.html")
+    |> render("forecast.html")
   end
 end
