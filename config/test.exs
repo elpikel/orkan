@@ -20,3 +20,5 @@ config :orkan, OrkanWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :orkan, Orkan.Subscriptions.Mailer, adapter: Bamboo.TestAdapter

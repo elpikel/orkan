@@ -48,7 +48,9 @@ defmodule Orkan.MixProject do
       {:tesla, "~> 1.4.3"},
       {:hackney, "~> 1.17"},
       {:quantum, "~> 3.0"},
-      {:decimal, "~> 2.0"}
+      {:decimal, "~> 2.0"},
+      {:bamboo, "~> 2.2"},
+      {:bamboo_phoenix, "~> 1.0.0"}
     ]
   end
 

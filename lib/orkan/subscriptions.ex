@@ -3,7 +3,7 @@ defmodule Orkan.Subscriptions do
 
   alias Orkan.Forecasts
   alias Orkan.Repo
-  alias Orkan.Subscriptions.Mail
+  alias Orkan.Subscriptions.Mailer
   alias Orkan.Subscriptions.Subscription
   alias Orkan.Subscriptions.User
 
@@ -29,6 +29,17 @@ defmodule Orkan.Subscriptions do
     end
   end
 
+  def send() do
+    User
+    |> Repo.all()
+    |> Enum.each(fn user -> send(user) end)
+  end
+
+  defp send(user) do
+    forecasts = Forecasts.get(user)
+    Mailer.send(user, forecasts)
+  end
+
   defp get_or_create_user(email) do
     case Repo.one(from u in User, where: u.email == ^email) do
       nil ->
@@ -38,16 +49,5 @@ defmodule Orkan.Subscriptions do
       user ->
         user
     end
-  end
-
-  def send() do
-    User
-    |> Repo.all()
-    |> Enum.each(fn user -> send(user) end)
-  end
-
-  defp send(user) do
-    forecasts = Forecasts.get(user)
-    Mail.send(user, forecasts)
   end
 end
