@@ -2,6 +2,7 @@ defmodule Orkan.Notifications.MailTest do
   use Orkan.DataCase
   use Bamboo.Test
 
+  alias Orkan.Forecasts
   alias Orkan.Forecasts.Forecast
   alias Orkan.Forecasts.Place
   alias Orkan.Subscriptions.Subscription
@@ -14,17 +15,18 @@ defmodule Orkan.Notifications.MailTest do
     user = Repo.insert!(%User{email: "test@test.te"})
     Repo.insert!(%Subscription{place_id: place.id, user_id: user.id})
 
-    forecast =
-      Repo.insert!(%Forecast{
-        place_id: place.id,
-        datetime: now,
-        wind_speed: 12.22,
-        wind_direction: 5
-      })
+    Repo.insert!(%Forecast{
+      place_id: place.id,
+      datetime: now,
+      wind_speed: 12.22,
+      wind_direction: 5
+    })
 
-    expected_email = Mail.forecast_email(user, [forecast])
+    forecasts = Forecasts.get(user)
 
-    Mail.send(user, [forecast])
+    expected_email = Mail.forecast_email(user, forecasts)
+
+    Mail.send(user, forecasts)
 
     assert_delivered_email(expected_email)
   end
