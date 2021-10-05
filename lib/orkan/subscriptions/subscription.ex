@@ -3,7 +3,7 @@ defmodule Orkan.Subscriptions.Subscription do
 
   import Ecto.Changeset
 
-  alias Orkan.Forecasts.Place
+  alias Orkan.Subscriptions.Place
   alias Orkan.Subscriptions.User
 
   schema "subscriptions" do

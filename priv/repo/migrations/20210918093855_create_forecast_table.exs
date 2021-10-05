@@ -6,7 +6,7 @@ defmodule Orkan.Repo.Migrations.CreateForecastTable do
       add :datetime, :utc_datetime
       add :wind_speed, :float
       add :wind_direction, :integer
-      add :place_id, references(:places)
+      add :place_id, :integer
     end
 
     create unique_index(:forecasts, [:place_id, :datetime])
