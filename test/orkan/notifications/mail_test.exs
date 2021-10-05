@@ -4,10 +4,10 @@ defmodule Orkan.Notifications.MailTest do
 
   alias Orkan.Forecasts
   alias Orkan.Forecasts.Forecast
-  alias Orkan.Forecasts.Place
+  alias Orkan.Notifications.Mail
+  alias Orkan.Subscriptions.Place
   alias Orkan.Subscriptions.Subscription
   alias Orkan.Subscriptions.User
-  alias Orkan.Notifications.Mail
 
   test "sends data" do
     now = DateTime.utc_now() |> DateTime.truncate(:second)
@@ -22,7 +22,7 @@ defmodule Orkan.Notifications.MailTest do
       wind_direction: 5
     })
 
-    forecasts = Forecasts.get(user)
+    forecasts = Forecasts.get([place])
 
     expected_email = Mail.forecast_email(user, forecasts)
 

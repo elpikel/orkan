@@ -2,52 +2,29 @@ defmodule Orkan.Forecasts do
   import Ecto.Query
 
   alias Orkan.Forecasts.Forecast
-  alias Orkan.Forecasts.Place
   alias Orkan.OpenMeteo.Client
   alias Orkan.Repo
-  alias Orkan.Subscriptions
 
-  def get_or_create_place(longitude, latitude, name) do
-    case Repo.one(from p in Place, where: p.longitude == ^longitude and p.latitude == ^latitude) do
-      nil ->
-        {:ok, place} =
-          Repo.insert(
-            Place.changeset(%Place{}, %{longitude: longitude, latitude: latitude, name: name}),
-            on_conflict: [set: [name: name]],
-            conflict_target: [:longitude, :latitude]
-          )
-
-        place
-
-      place ->
-        place
-    end
-  end
-
-  def get(user) do
+  def get(places) do
     today = DateTime.new!(Date.utc_today(), ~T[00:00:00.000], "Etc/UTC")
     tomorrow = add_days(today, 1)
     in_two_days = add_days(tomorrow, 2)
-
-    places_id =
-      user.id
-      |> Subscriptions.get()
-      |> Enum.map(fn subscription -> subscription.place_id end)
+    places_id = Enum.map(places, fn place -> place.id end)
 
     query =
-      from p in Place,
-        join: f in Forecast,
-        on: f.place_id == p.id,
-        select: {p.name, f.datetime, f.wind_speed, f.wind_direction},
+      from f in Forecast,
+        select: {f.place_id, f.datetime, f.wind_speed, f.wind_direction},
         where: f.datetime >= ^tomorrow and f.datetime < ^in_two_days,
-        where: p.id in ^places_id,
-        order_by: [p.name, f.datetime]
+        where: f.place_id in ^places_id,
+        order_by: [f.place_id, f.datetime]
 
     Repo.all(query)
-    |> Enum.group_by(fn {name, _, _, _} -> name end)
-    |> Enum.map(fn {name, forecasts} ->
+    |> Enum.group_by(fn {place_id, _, _, _} -> place_id end)
+    |> Enum.map(fn {place_id, forecasts} ->
+      place = Enum.find(places, fn place -> place.id == place_id end)
+
       %{
-        place: name,
+        place: place.name,
         place_forecasts:
           Enum.map(forecasts, fn {_, datetime, wind_speed, wind_direction} ->
             %{
@@ -60,14 +37,13 @@ defmodule Orkan.Forecasts do
     end)
   end
 
-  def update() do
-    Place
-    |> Repo.all()
-    |> Enum.map(fn place -> update(place) end)
+  def update_forecasts(places) do
+    places
+    |> Enum.map(fn place -> update_forecast(place) end)
     |> List.flatten()
   end
 
-  defp update(place) do
+  defp update_forecast(place) do
     forecasts = Client.get_data(place.longitude, place.latitude)
 
     forecasts["hourly"]["time"]

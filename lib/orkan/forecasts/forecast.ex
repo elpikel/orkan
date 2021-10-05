@@ -3,14 +3,11 @@ defmodule Orkan.Forecasts.Forecast do
 
   import Ecto.Changeset
 
-  alias Orkan.Forecasts.Place
-
   schema "forecasts" do
     field :datetime, :utc_datetime
     field :wind_speed, :float
     field :wind_direction, :integer
-
-    belongs_to :place, Place
+    field :place_id, :integer
   end
 
   def changeset(struct, params) do

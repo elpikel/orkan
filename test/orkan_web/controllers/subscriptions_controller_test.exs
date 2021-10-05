@@ -4,9 +4,9 @@ defmodule OrkanWeb.SubscriptionsControllerTest do
   import Ecto.Query
 
   alias Orkan.Repo
+  alias Orkan.Subscriptions.Place
   alias Orkan.Subscriptions.Subscription
   alias Orkan.Subscriptions.User
-  alias Orkan.Forecasts.Place
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")
