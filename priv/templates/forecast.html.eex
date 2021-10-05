@@ -1,0 +1,16 @@
+<html>
+  <head> </head>
+  <body>
+    <h1>Orkan wind alert</h1>
+    <%= for forecast <- forecasts do %>
+      <h2><%= forecast.place %></h2>
+      <%= for place_forecasts <- forecast.place_forecasts do %>
+        <div>
+          <span>datetime: <%= place_forecasts.datetime %></span>,
+          <span>wind direction: <%= place_forecasts.wind_direction %></span> 
+          <span>wind speed: <%=place_forecasts.wind_speed %></span>
+        </div>
+      <% end %> 
+    <% end %>
+  </body>
+</html>

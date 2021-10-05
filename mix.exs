@@ -49,8 +49,7 @@ defmodule Orkan.MixProject do
       {:hackney, "~> 1.17"},
       {:quantum, "~> 3.0"},
       {:decimal, "~> 2.0"},
-      {:bamboo, "~> 2.2"},
-      {:bamboo_phoenix, "~> 1.0.0"}
+      {:bamboo, "~> 2.2"}
     ]
   end
 

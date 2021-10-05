@@ -48,7 +48,7 @@ defmodule Orkan.Forecasts do
     |> Enum.map(fn {name, forecasts} ->
       %{
         place: name,
-        forecasts:
+        place_forecasts:
           Enum.map(forecasts, fn {_, datetime, wind_speed, wind_direction} ->
             %{
               datetime: datetime,

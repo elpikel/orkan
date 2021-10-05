@@ -1,6 +1,4 @@
 defmodule Orkan.Notifications.Mail do
-  use Bamboo.Phoenix, view: OrkanWeb.EmailView
-
   import Bamboo.Email
 
   alias Orkan.Notifications.Mailer
@@ -12,11 +10,16 @@ defmodule Orkan.Notifications.Mail do
   end
 
   def forecast_email(user, forecasts) do
+    html =
+      EEx.eval_file(
+        Path.join([:code.priv_dir(:orkan), "templates", "forecast.html.eex"]),
+        forecasts: forecasts
+      )
+
     new_email()
     |> from("Orkan<info@orkan.com>")
     |> to(user.email)
     |> subject("Orkan: forecast")
-    |> assign(:forecasts, forecasts)
-    |> render("forecast.html")
+    |> html_body(html)
   end
 end
