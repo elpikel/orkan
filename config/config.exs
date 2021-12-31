@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :orkan,
   ecto_repos: [Orkan.Repo]
@@ -25,5 +25,7 @@ config :orkan, Orkan.Scheduler,
 config :orkan, Orkan.Notifications.Mailer,
   adapter: Bamboo.SendGridAdapter,
   api_key: System.get_env("SENDGRID_API_KEY")
+
+config :tesla, adapter: Tesla.Adapter.Hackney
 
 import_config "#{Mix.env()}.exs"
