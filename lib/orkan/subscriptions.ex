@@ -6,6 +6,10 @@ defmodule Orkan.Subscriptions do
   alias Orkan.Subscriptions.Subscription
   alias Orkan.Subscriptions.User
 
+  def places() do
+    Repo.all(Place)
+  end
+
   def places(user_id) do
     Repo.all(
       from p in Place,
