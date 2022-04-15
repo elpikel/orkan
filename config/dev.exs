@@ -76,3 +76,9 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 config :orkan, Orkan.Notifications.Mailer, adapter: Bamboo.LocalAdapter
+
+config :orkan, Orkan.Scheduler,
+  jobs: [
+    {"* * * * *", {Orkan.Forecasts.Worker, :update_forecasts, []}},
+    {"* * * * *", {Orkan.Notifications.Worker, :send_forecasts, []}}
+  ]

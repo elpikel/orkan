@@ -18,8 +18,8 @@ config :phoenix, :json_library, Jason
 
 config :orkan, Orkan.Scheduler,
   jobs: [
-    {"1 * * * *", {Orkan.Forecasts.Worker, :update_forecasts, []}},
-    {"1 * * * *", {Orkan.Notifications.Worker, :send_forecasts, []}}
+    {"0 5 * * *", {Orkan.Forecasts.Worker, :update_forecasts, []}},
+    {"1 7 * * *", {Orkan.Notifications.Worker, :send_forecasts, []}}
   ]
 
 config :orkan, Orkan.Notifications.Mailer,
