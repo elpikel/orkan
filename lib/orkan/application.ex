@@ -4,7 +4,6 @@ defmodule Orkan.Application do
   def start(_type, _args) do
     children = [
       Orkan.Repo,
-      OrkanWeb.Telemetry,
       {Phoenix.PubSub, name: Orkan.PubSub},
       OrkanWeb.Endpoint,
       Orkan.Scheduler
