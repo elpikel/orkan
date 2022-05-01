@@ -11,14 +11,13 @@ defmodule Orkan.Forecasts do
     in_two_days = add_days(tomorrow, 2)
     places_id = Enum.map(places, fn place -> place.id end)
 
-    query =
-      from f in Forecast,
-        select: {f.place_id, f.datetime, f.wind_speed, f.wind_direction},
-        where: f.datetime >= ^tomorrow and f.datetime < ^in_two_days,
-        where: f.place_id in ^places_id,
-        order_by: [f.place_id, f.datetime]
-
-    Repo.all(query)
+    Forecast
+    |> from(as: :forecast)
+    |> where([forecast: f], f.datetime >= ^tomorrow and f.datetime < ^in_two_days)
+    |> where([forecast: f], f.place_id in ^places_id)
+    |> order_by([forecast: f], [f.place_id, f.datetime])
+    |> select([forecast: f], {f.place_id, f.datetime, f.wind_speed, f.wind_direction})
+    |> Repo.all()
     |> Enum.group_by(fn {place_id, _, _, _} -> place_id end)
     |> Enum.map(fn {place_id, forecasts} ->
       place = Enum.find(places, fn place -> place.id == place_id end)
