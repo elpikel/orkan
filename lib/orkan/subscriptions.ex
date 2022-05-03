@@ -11,15 +11,12 @@ defmodule Orkan.Subscriptions do
   end
 
   def places(user_id) do
-    Repo.all(
-      from p in Place,
-        join: s in Subscription,
-        on: p.id == s.place_id,
-        join: u in User,
-        on: s.user_id == u.id,
-        where: u.id == ^user_id,
-        select: p
-    )
+    Subscription
+    |> from(as: :subscription)
+    |> join(:inner, [subscription: s], assoc(s, :place), as: :place)
+    |> where([subscription: s], s.user_id == ^user_id)
+    |> select([place: p], p)
+    |> Repo.all()
   end
 
   def users() do
