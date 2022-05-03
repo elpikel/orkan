@@ -46,30 +46,23 @@ defmodule Orkan.Subscriptions do
   end
 
   defp get_or_create_user(email) do
-    case Repo.one(from u in User, where: u.email == ^email) do
-      nil ->
-        {:ok, user} = Repo.insert(User.changeset(%User{}, %{email: email}), on_conflict: :nothing)
-        user
+    {:ok, user} =
+      %User{}
+      |> User.changeset(%{email: email})
+      |> Repo.insert(on_conflict: :nothing)
 
-      user ->
-        user
-    end
+    user
   end
 
   def get_or_create_place(longitude, latitude, name) do
-    case Repo.one(from p in Place, where: p.longitude == ^longitude and p.latitude == ^latitude) do
-      nil ->
-        {:ok, place} =
-          Repo.insert(
-            Place.changeset(%Place{}, %{longitude: longitude, latitude: latitude, name: name}),
-            on_conflict: [set: [name: name]],
-            conflict_target: [:longitude, :latitude]
-          )
+    {:ok, place} =
+      %Place{}
+      |> Place.changeset(%{longitude: longitude, latitude: latitude, name: name})
+      |> Repo.insert(
+        on_conflict: :nothing,
+        conflict_target: [:longitude, :latitude]
+      )
 
-        place
-
-      place ->
-        place
-    end
+    place
   end
 end
